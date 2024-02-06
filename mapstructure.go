@@ -970,6 +970,11 @@ func (d *Decoder) decodeMapFromStruct(name string, dataVal reflect.Value, val re
 		switch v.Kind() {
 		// this is an embedded struct, so handle it differently
 		case reflect.Struct:
+			if v.Type().String() == "time.Time" {
+				// 时间类型, 直接赋值
+				valMap.SetMapIndex(reflect.ValueOf(keyName), v)
+				continue
+			}
 			x := reflect.New(v.Type())
 			x.Elem().Set(v)
 
